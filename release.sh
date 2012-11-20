@@ -42,6 +42,6 @@ echo -n "commiting project.clj, release notes and readme.  enter to continue:" \
 && lein do clean, test, deploy clojars \
 && git flow release finish $version \
 && echo "Now push to github. Don't forget the tags!" \
-&& lein set-version ${next_version} \
+&& lein with-profile release set-version ${next_version} \
 && git add project.clj \
 && git commit -m "Updated version for next release cycle"
