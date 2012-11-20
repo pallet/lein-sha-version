@@ -8,9 +8,8 @@
 (defn git-sha [{:keys [root version sha]}]
   (println "Finding SHA for" root)
   (let [^Repository repository (.. (FileRepositoryBuilder.)
-                                   (setGitDir (file root ".git"))
                                    (readEnvironment)
-                                   (findGitDir)
+                                   (findGitDir (file root))
                                    (build))
         ^ObjectId head (.resolve repository "HEAD")]
     (if head
