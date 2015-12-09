@@ -22,6 +22,14 @@ To control the length of the generated SHA, you can set the `:length` key under
 :sha {:length 8}
 ```
 
+To add the generated SHA to your artifacts' `MANIFEST.MF`, you can set the
+`:manifest-header` to your project or profile. The SHA will be written to that
+header in your jar and/or uberjar.
+
+```clj
+:sha {:manifest-header "Implementation-Version"}
+```
+
 ## License
 
 Copyright © 2012 Hugo Duncan

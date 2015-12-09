@@ -1,10 +1,10 @@
 (ns lein-sha-version.plugin
   (:use
-   [clojure.java.io :only [file]]
-   [leiningen.core.main :only [debug]])
+    [clojure.java.io :only [file]]
+    [leiningen.core.main :only [debug]])
   (:import
-   org.eclipse.jgit.storage.file.FileRepositoryBuilder
-   [org.eclipse.jgit.lib ObjectId Repository]))
+    org.eclipse.jgit.storage.file.FileRepositoryBuilder
+    [org.eclipse.jgit.lib ObjectId Repository]))
 
 (defn git-sha [{:keys [root version sha]}]
   (debug "Finding SHA for" root)
@@ -19,6 +19,16 @@
         (.name abbr))
       version)))
 
+(defn update-manifest [git-sha {manifest                  :manifest
+                                {:keys [manifest-header]} :sha}]
+  (if manifest-header
+    (merge {manifest-header git-sha} manifest)
+    manifest))
+
 (defn middleware
   [project]
-  (assoc project :version (git-sha project)))
+  (let [sha (git-sha project)
+        manifest (update-manifest sha project)]
+    (-> project
+        (assoc :version sha)
+        (assoc :manifest manifest))))
